@@ -5,7 +5,6 @@ workflows:
   android-build:
     name: Android Build Workflow
     environment:
-      # android_sdk_image: 34 # This line is removed/commented out
       java: 17 # Java version (OpenJDK)
     triggering:
       branch_patterns:
@@ -24,9 +23,9 @@ workflows:
       - name: Build Android App
         script: |
           # Ensure Gradle Wrapper is executable
-          chmod +x $CM_BUILD_DIR/app/gradlew
+          chmod +x $CM_BUILD_DIR/gradlew # Path corrected: removed 'app/'
           # Build release APK
-          $CM_BUILD_DIR/app/gradlew assembleRelease
+          $CM_BUILD_DIR/gradlew assembleRelease # Path corrected: removed 'app/'
         working_directory: app
     artifacts:
       - app/build/outputs/**/*.apk
