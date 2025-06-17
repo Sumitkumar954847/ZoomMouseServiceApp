@@ -1,0 +1,40 @@
+# See https://docs.codemagic.io/getting-started/yaml/
+# Learn more about Android build steps: https://docs.codemagic.io/yaml-basic-configuration/android/
+
+workflows:
+  android-build:
+    name: Android Build Workflow
+    environment:
+      android_sdk_image: 34 # Android SDK platform version
+      java: 17 # Java version (OpenJDK)
+    triggering:
+      branch_patterns:
+        - pattern: main
+          include: true
+    scripts:
+      - name: Set up Android keystore
+        script: |
+          # Convert base64 encoded keystore from environment variable to file
+          echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
+          echo "Keystore set up complete."
+      - name: Set up local.properties
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/app/local.properties" # Path corrected to 'app'
+          echo "Local.properties set up complete."
+      - name: Build Android App
+        script: |
+          # Ensure Gradle Wrapper is executable
+          chmod +x $CM_BUILD_DIR/app/gradlew # Path corrected to 'app'
+          # Build release APK
+          $CM_BUILD_DIR/app/gradlew assembleRelease
+        working_directory: app # Corrected to 'app'
+    artifacts:
+      - app/build/outputs/**/*.apk # Path corrected to 'app'
+      - app/build/outputs/**/*.aab # Path corrected to 'app'
+    publishing:
+      email:
+        recipients:
+          - ss9548479848@gmail.com # Tumhara email
+        notify:
+          success: true
+          failure: true
