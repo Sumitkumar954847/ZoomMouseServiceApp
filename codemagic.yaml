@@ -5,7 +5,7 @@ workflows:
   android-build:
     name: Android Build Workflow
     environment:
-      android_sdk_image: 34 # Android SDK platform version
+      # android_sdk_image: 34 # This line is removed/commented out
       java: 17 # Java version (OpenJDK)
     triggering:
       branch_patterns:
@@ -19,22 +19,23 @@ workflows:
           echo "Keystore set up complete."
       - name: Set up local.properties
         script: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/app/local.properties" # Path corrected to 'app'
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/app/local.properties"
           echo "Local.properties set up complete."
       - name: Build Android App
         script: |
           # Ensure Gradle Wrapper is executable
-          chmod +x $CM_BUILD_DIR/app/gradlew # Path corrected to 'app'
+          chmod +x $CM_BUILD_DIR/app/gradlew
           # Build release APK
           $CM_BUILD_DIR/app/gradlew assembleRelease
-        working_directory: app # Corrected to 'app'
+        working_directory: app
     artifacts:
-      - app/build/outputs/**/*.apk # Path corrected to 'app'
-      - app/build/outputs/**/*.aab # Path corrected to 'app'
+      - app/build/outputs/**/*.apk
+      - app/build/outputs/**/*.aab
     publishing:
       email:
         recipients:
-          - ss9548479848@gmail.com # Tumhara email
+          - ss9548479848@gmail.com
         notify:
           success: true
           failure: true
+
